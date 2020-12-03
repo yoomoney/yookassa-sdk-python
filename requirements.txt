@@ -1,0 +1,5 @@
+requests
+setuptools
+urllib3
+distro
+deprecated
