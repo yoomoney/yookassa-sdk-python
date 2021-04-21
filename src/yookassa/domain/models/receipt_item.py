@@ -48,7 +48,7 @@ class ReceiptItem(BaseObject):
 
     @quantity.setter
     def quantity(self, value):
-        self.__quantity = Decimal(float(value))
+        self.__quantity = Decimal(str(float(value)))
 
     @property
     def amount(self):
@@ -120,7 +120,7 @@ class ReceiptItem(BaseObject):
 
     @excise.setter
     def excise(self, value):
-        self.__excise = Decimal(float(value))
+        self.__excise = Decimal(str(value))
 
 
 class PaymentMode(object):

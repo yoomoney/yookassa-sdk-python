@@ -36,4 +36,4 @@ class BaseObject(object):
                 yield prop_name, prop_value
 
     def json(self):
-        return json.dumps(dict(self), default=str)
+        return json.dumps(dict(self), default=str, ensure_ascii=False)

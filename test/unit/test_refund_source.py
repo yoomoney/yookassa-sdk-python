@@ -28,7 +28,7 @@ class TestRefundSource(unittest.TestCase):
         self.assertEqual('79990000000', src.account_id)
 
         self.assertEqual({"value": 100.01, "currency": Currency.RUB}, dict(src.amount))
-        self.assertEqual(src.amount.value, 100.01)
+        self.assertEqual(float(src.amount.value), 100.01)
 
         with self.assertRaises(TypeError):
             src.amount = 'invalid type'

@@ -109,5 +109,5 @@ class TestReceiptResponse(unittest.TestCase):
         self.assertEqual(response.items.count(ReceiptItemResponse), 0)
 
         self.assertEqual(response.settlements[0].type, SettlementType.CASHLESS)
-        self.assertEqual(response.settlements[0].amount.value, 45.67)
+        self.assertEqual(float(response.settlements[0].amount.value), 45.67)
         self.assertEqual(response.settlements[0].amount.currency, Currency.RUB)
