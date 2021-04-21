@@ -13,7 +13,7 @@ class TestAmount(unittest.TestCase):
         amount.currency = Currency.RUB
 
         self.assertEqual({'value': 0.1, 'currency': Currency.RUB}, dict(amount))
-        self.assertEqual(0.1, amount.value)
+        self.assertEqual(0.1, float(amount.value))
 
     def test_amount_value(self):
         amount = Amount({
@@ -22,4 +22,4 @@ class TestAmount(unittest.TestCase):
         })
 
         self.assertEqual({"value": 100.01, "currency": Currency.RUB}, dict(amount))
-        self.assertEqual(amount.value, 100.01)
+        self.assertEqual(float(amount.value), 100.01)

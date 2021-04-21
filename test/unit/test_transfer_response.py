@@ -30,7 +30,7 @@ class TestTransferResponse(unittest.TestCase):
         self.assertEqual(TransferStatus.SUCCEEDED, transfer.status)
 
         self.assertEqual({"value": 100.01, "currency": Currency.RUB}, dict(transfer.amount))
-        self.assertEqual(transfer.amount.value, 100.01)
+        self.assertEqual(float(transfer.amount.value), 100.01)
 
         with self.assertRaises(TypeError):
             transfer.amount = 'invalid type'
@@ -59,4 +59,4 @@ class TestTransferResponse(unittest.TestCase):
         self.assertEqual(TransferStatus.SUCCEEDED, transfer.status)
 
         self.assertEqual({"value": 100.01, "currency": Currency.RUB}, dict(transfer.amount))
-        self.assertEqual(transfer.amount.value, 100.01)
+        self.assertEqual(float(transfer.amount.value), 100.01)

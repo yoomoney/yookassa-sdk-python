@@ -40,7 +40,7 @@ class ReceiptItemResponse(ResponseObject):
 
     @quantity.setter
     def quantity(self, value):
-        self.__quantity = Decimal(float(value))
+        self.__quantity = Decimal(str(float(value)))
 
     @property
     def amount(self):
