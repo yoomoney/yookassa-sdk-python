@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 
 from yookassa.domain.common import BaseObject
 
@@ -21,7 +21,7 @@ class Amount(BaseObject):
 
     @value.setter
     def value(self, value):
-        self.__value = Decimal(str(round(float(value), 2)))
+        self.__value = Decimal(str(float(value))).quantize(Decimal('1.11'), rounding=ROUND_HALF_UP)
 
     @property
     def currency(self):

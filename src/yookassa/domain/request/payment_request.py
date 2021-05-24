@@ -13,9 +13,10 @@ from yookassa.domain.models.receipt import Receipt
 from yookassa.domain.models.recipient import Recipient
 from yookassa.domain.models.transfer import Transfer
 
+DESCRIPTION_MAX_LENGTH = 128
+
 
 class PaymentRequest(RequestObject):
-
     __recipient = None
 
     __amount = None
@@ -77,8 +78,11 @@ class PaymentRequest(RequestObject):
     @description.setter
     def description(self, value):
         cast_value = str(value)
-        if cast_value and len(cast_value) <= 128:
-            self.__description = cast_value
+        if cast_value:
+            if len(cast_value) <= DESCRIPTION_MAX_LENGTH:
+                self.__description = cast_value
+            else:
+                raise ValueError('The value of the description parameter is too long. Max length is {}'.format(DESCRIPTION_MAX_LENGTH))
         else:
             raise ValueError('Invalid description value')
 
@@ -232,7 +236,7 @@ class PaymentRequest(RequestObject):
             if self.payment_method_data:
                 self.__set_validation_error('Both payment_method_id and payment_data values are specified')
 
-        if self.payment_method_data and self.payment_method_data.type == PaymentMethodType.BANK_CARD  \
+        if self.payment_method_data and self.payment_method_data.type == PaymentMethodType.BANK_CARD \
                 and self.payment_method_data.card is not None:
             # Get current date with an offset.
             # Why? Because expiration is relative to the transaction
