@@ -181,8 +181,8 @@ class ReceiptRequest(RequestObject):
         if self.type is ReceiptType.PAYMENT and self.payment_id is None:
             self.__set_validation_error('Receipt payment_id not specified')
 
-        if self.type is ReceiptType.REFUND and self.refund_id is None:
-            self.__set_validation_error('Receipt refund_id not specified')
+        if self.type is ReceiptType.REFUND and self.refund_id is None and self.payment_id is None:
+            self.__set_validation_error('Receipt refund_id or payment_id not specified')
 
     def has_items(self):
         return bool(self.items)

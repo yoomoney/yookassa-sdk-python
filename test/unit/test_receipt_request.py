@@ -236,13 +236,13 @@ class TestReceiptRequest(unittest.TestCase):
         with self.assertRaises(ValueError):
             request.validate()
 
-        request.refund_id = '215d8da0-000f-50be-b000-0003308c89be'
+        request.type = ReceiptType.REFUND
 
         with self.assertRaises(ValueError):
             request.validate()
 
-        request.type = ReceiptType.REFUND
-        request.payment_id = '215d8da0-000f-50be-b000-0003308c89be'
+        request.type = ReceiptType.PAYMENT
+        request.refund_id = '215d8da0-000f-50be-b000-0003308c89be'
 
         with self.assertRaises(ValueError):
             request.validate()
