@@ -17,6 +17,8 @@ class TransferResponse(BaseObject):
 
     __status = None
 
+    __metadata = None
+
     @property
     def account_id(self):
         return self.__account_id
@@ -58,6 +60,15 @@ class TransferResponse(BaseObject):
     @status.setter
     def status(self, value):
         self.__status = str(value)
+
+    @property
+    def metadata(self):
+        return self.__metadata
+
+    @metadata.setter
+    def metadata(self, value):
+        if type(value) is dict:
+            self.__metadata = value
 
 
 class TransferStatus(object):

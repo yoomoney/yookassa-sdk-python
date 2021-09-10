@@ -55,6 +55,10 @@ class TestPaymentRequestBuilder(unittest.TestCase):
                     "platform_fee_amount": {
                         "value": 10.01,
                         "currency": Currency.RUB
+                    },
+                    "metadata": {
+                        "meta1": 'metatest 1',
+                        "meta2": 'metatest 2'
                     }
                 }
             ])
@@ -109,6 +113,10 @@ class TestPaymentRequestBuilder(unittest.TestCase):
                 "platform_fee_amount": {
                     "value": 10.01,
                     "currency": Currency.RUB
+                },
+                "metadata": {
+                    "meta1": 'metatest 1',
+                    "meta2": 'metatest 2'
                 }
             }]
         }, dict(request))
