@@ -15,6 +15,8 @@ class Transfer(BaseObject):
 
     __platform_fee_amount = None
 
+    __metadata = None
+
     @property
     def account_id(self):
         return self.__account_id
@@ -48,3 +50,12 @@ class Transfer(BaseObject):
             self.__platform_fee_amount = value
         else:
             raise TypeError('Invalid transfer.platform_fee_amount value type')
+
+    @property
+    def metadata(self):
+        return self.__metadata
+
+    @metadata.setter
+    def metadata(self, value):
+        if type(value) is dict:
+            self.__metadata = value

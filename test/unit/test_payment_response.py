@@ -79,7 +79,11 @@ class TestPaymentResponse(unittest.TestCase):
                         "value": 10.01,
                         "currency": Currency.RUB
                     },
-                    "status": "succeeded"
+                    "status": "succeeded",
+                    "metadata": {
+                        "meta1": 'metatest 1',
+                        "meta2": 'metatest 2'
+                    }
                 }
             ],
             "income_amount": {
@@ -140,7 +144,11 @@ class TestPaymentResponse(unittest.TestCase):
                 "value": 10.01,
                 "currency": Currency.RUB
             },
-            "status": TransferStatus.SUCCEEDED
+            "status": TransferStatus.SUCCEEDED,
+            "metadata": {
+                "meta1": 'metatest 1',
+                "meta2": 'metatest 2'
+            }
         }))
 
         response.transfers = None

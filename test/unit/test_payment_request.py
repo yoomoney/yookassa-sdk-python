@@ -83,6 +83,10 @@ class TestPaymentRequest(unittest.TestCase):
             "platform_fee_amount": {
                 "value": 10.01,
                 "currency": Currency.RUB
+            },
+            "metadata": {
+                "meta1": 'metatest 1',
+                "meta2": 'metatest 2'
             }
         }))
 
@@ -152,6 +156,10 @@ class TestPaymentRequest(unittest.TestCase):
                     "platform_fee_amount": {
                         "value": 10.01,
                         "currency": Currency.RUB
+                    },
+                    "metadata": {
+                        "meta1": 'metatest 1',
+                        "meta2": 'metatest 2'
                     }
                 }
             ]
@@ -211,6 +219,23 @@ class TestPaymentRequest(unittest.TestCase):
                     }
                 ]
             },
+            'transfers': [
+                {
+                    'account_id': '79990000000',
+                    "amount": {
+                        "value": 100.01,
+                        "currency": Currency.RUB
+                    },
+                    "platform_fee_amount": Amount({
+                        "value": 10.01,
+                        "currency": Currency.RUB
+                    }),
+                    "metadata": {
+                        "meta1": 'metatest 1',
+                        "meta2": 'metatest 2'
+                    }
+                }
+            ],
             'metadata': {'key': 'value'}
         })
 
@@ -220,6 +245,7 @@ class TestPaymentRequest(unittest.TestCase):
         self.assertIsInstance(request.recipient, Recipient)
         self.assertIsInstance(request.payment_method_data, PaymentData)
         self.assertIsInstance(request.airline, Airline)
+        self.assertIsInstance(request.transfers, list)
 
         with self.assertRaises(TypeError):
             request.receipt = 'invalid receipt'
@@ -247,7 +273,7 @@ class TestPaymentRequest(unittest.TestCase):
             request.airline = 'Invalid airline'
 
         with self.assertRaises(TypeError):
-            request.transfers = 'Invalid airline'
+            request.transfers = 'Invalid transfers'
 
     def test_request_validate(self):
         request = PaymentRequest()
