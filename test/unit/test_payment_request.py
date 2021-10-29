@@ -201,7 +201,7 @@ class TestPaymentRequest(unittest.TestCase):
                 ]},
             'payment_method_id': '123',
             'payment_token': '99091209012',
-            'confirmation': {'type': ConfirmationType.REDIRECT, 'return_url': 'return.url'},
+            'confirmation': {'type': ConfirmationType.MOBILE_APPLICATION, 'return_url': 'return.url'},
             'client_ip': '192.0.0.0',
             "airline": {
                 "booking_reference": "IIIKRV",
