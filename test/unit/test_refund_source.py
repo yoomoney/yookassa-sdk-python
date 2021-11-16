@@ -13,21 +13,21 @@ class TestRefundSource(unittest.TestCase):
         src = RefundSource()
         src.account_id = '79990000000'
         src.amount = Amount({
-            "value": '100.01',
+            "value": 100.01,
             "currency": Currency.RUB
         })
 
         self.assertEqual({
             'account_id': '79990000000',
             "amount": {
-                "value": 100.01,
+                "value": "100.01",
                 "currency": Currency.RUB
             }
         }, dict(src))
 
         self.assertEqual('79990000000', src.account_id)
 
-        self.assertEqual({"value": 100.01, "currency": Currency.RUB}, dict(src.amount))
+        self.assertEqual({"value": "100.01", "currency": Currency.RUB}, dict(src.amount))
         self.assertEqual(float(src.amount.value), 100.01)
 
         with self.assertRaises(TypeError):

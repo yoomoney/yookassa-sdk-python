@@ -8,10 +8,12 @@ from yookassa.domain.models.amount import Amount
 from yookassa.domain.models.confirmation.confirmation import Confirmation
 from yookassa.domain.models.confirmation.request.confirmation_redirect import ConfirmationRedirect
 from yookassa.domain.models.currency import Currency
+from yookassa.domain.models.deal import PaymentDealInfo
 from yookassa.domain.models.payment_data.payment_data import PaymentData
 from yookassa.domain.models.payment_data.request.payment_data_webmoney import PaymentDataWebmoney
 from yookassa.domain.models.receipt import Receipt
 from yookassa.domain.models.recipient import Recipient
+from yookassa.domain.models.settlement import SettlementPayoutType
 from yookassa.domain.models.transfer import Transfer
 from yookassa.domain.request.payment_request import PaymentRequest
 
@@ -89,9 +91,22 @@ class TestPaymentRequest(unittest.TestCase):
                 "meta2": 'metatest 2'
             }
         }))
+        request.deal = PaymentDealInfo({
+            'id': 'dl-28646d17-0022-5000-8000-01e154d1324b',
+            'settlements': [
+                {
+                    "type": SettlementPayoutType.PAYOUT,
+                    "amount": {
+                        "value": "80.00",
+                        "currency": Currency.RUB
+                    }
+                }
+            ]
+        })
+        request.merchant_customer_id = '79990001122'
 
         self.assertEqual({
-            'amount': {'value': 0.1, 'currency': Currency.RUB},
+            'amount': {'value': '0.10', 'currency': Currency.RUB},
             'recipient': {
                 'account_id': '213',
                 'gateway_id': '123'
@@ -108,18 +123,18 @@ class TestPaymentRequest(unittest.TestCase):
                 'items': [
                     {
                         "description": "Product 1",
-                        "quantity": 2.0,
+                        "quantity": "2.0",
                         "amount": {
-                            "value": 250.0,
+                            "value": "250.00",
                             "currency": Currency.RUB
                         },
                         "vat_code": 2
                     },
                     {
                         "description": "Product 2",
-                        "quantity": 1.0,
+                        "quantity": "1.0",
                         "amount": {
-                            "value": 100.0,
+                            "value": "100.00",
                             "currency": Currency.RUB
                         },
                         "vat_code": 2
@@ -150,11 +165,11 @@ class TestPaymentRequest(unittest.TestCase):
                 {
                     'account_id': '79990000000',
                     "amount": {
-                        "value": 100.01,
+                        "value": "100.01",
                         "currency": Currency.RUB
                     },
                     "platform_fee_amount": {
-                        "value": 10.01,
+                        "value": "10.01",
                         "currency": Currency.RUB
                     },
                     "metadata": {
@@ -162,12 +177,23 @@ class TestPaymentRequest(unittest.TestCase):
                         "meta2": 'metatest 2'
                     }
                 }
-            ]
+            ],
+            'deal': {
+                'id': 'dl-28646d17-0022-5000-8000-01e154d1324b',
+                'settlements': [{
+                    'type': 'payout',
+                    'amount': {
+                        'value': '80.00',
+                        'currency': 'RUB'
+                    }
+                }]
+            },
+            'merchant_customer_id': '79990001122'
         }, dict(request))
 
     def test_request_setters(self):
         request = PaymentRequest({
-            'amount': {'value': 0.1, 'currency': Currency.RUB},
+            'amount': {'value': '0.10', 'currency': Currency.RUB},
             'recipient': {
                 'account_id': '213',
                 'gateway_id': '123'
@@ -182,18 +208,18 @@ class TestPaymentRequest(unittest.TestCase):
                 'items': [
                     {
                         "description": "Product 1",
-                        "quantity": 2.0,
+                        "quantity": "2.0",
                         "amount": {
-                            "value": 250.0,
+                            "value": "250.00",
                             "currency": Currency.RUB
                         },
                         "vat_code": 2
                     },
                     {
                         "description": "Product 2",
-                        "quantity": 1.0,
+                        "quantity": "1.0",
                         "amount": {
-                            "value": 100.0,
+                            "value": "100.00",
                             "currency": Currency.RUB
                         },
                         "vat_code": 2
@@ -223,11 +249,11 @@ class TestPaymentRequest(unittest.TestCase):
                 {
                     'account_id': '79990000000',
                     "amount": {
-                        "value": 100.01,
+                        "value": "100.01",
                         "currency": Currency.RUB
                     },
                     "platform_fee_amount": Amount({
-                        "value": 10.01,
+                        "value": "10.01",
                         "currency": Currency.RUB
                     }),
                     "metadata": {
@@ -236,7 +262,18 @@ class TestPaymentRequest(unittest.TestCase):
                     }
                 }
             ],
-            'metadata': {'key': 'value'}
+            'metadata': {'key': 'value'},
+            'deal': {
+                'id': 'dl-28646d17-0022-5000-8000-01e154d1324b',
+                'settlements': [{
+                    'type': 'payout',
+                    'amount': {
+                        'value': "80.00",
+                        'currency': 'RUB'
+                    }
+                }]
+            },
+            'merchant_customer_id': '79990001122'
         })
 
         self.assertIsInstance(request.confirmation, Confirmation)
@@ -246,6 +283,7 @@ class TestPaymentRequest(unittest.TestCase):
         self.assertIsInstance(request.payment_method_data, PaymentData)
         self.assertIsInstance(request.airline, Airline)
         self.assertIsInstance(request.transfers, list)
+        self.assertIsInstance(request.deal, PaymentDealInfo)
 
         with self.assertRaises(TypeError):
             request.receipt = 'invalid receipt'
@@ -274,6 +312,11 @@ class TestPaymentRequest(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             request.transfers = 'Invalid transfers'
+
+        with self.assertRaises(ValueError):
+            request.merchant_customer_id = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ' \
+                                           'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ' \
+                                           'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     def test_request_validate(self):
         request = PaymentRequest()

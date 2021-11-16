@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
+from deprecated.classic import deprecated
 from yookassa.domain.common import BaseObject
 
 
+@deprecated("This class will be removed in one of future versions")
 class RequestorType:
     MERCHANT = "merchant"
     THIRD_PARTY_CLIENT = "third_party_client"
 
 
+@deprecated("This class will be removed in one of future versions")
 class Requestor(BaseObject):
     """
     Class representing requestor data wrapper object
@@ -22,6 +25,7 @@ class Requestor(BaseObject):
         self.__type = str(value)
 
 
+@deprecated("This class will be removed in one of future versions")
 class RequestorMerchant(Requestor):
     """
     Class representing requestor_merchant data wrapper object
@@ -39,6 +43,7 @@ class RequestorMerchant(Requestor):
         self.__account_id = str(value)
 
 
+@deprecated("This class will be removed in one of future versions")
 class RequestorThirdPartyClient(Requestor):
     """
     Class representing requestor_third_party_client data wrapper object
@@ -66,6 +71,7 @@ class RequestorThirdPartyClient(Requestor):
         self.__client_name = str(value)
 
 
+@deprecated("This class will be removed in one of future versions")
 class RequestorFactory(object):
     """
     Base factory class for object that has type property.

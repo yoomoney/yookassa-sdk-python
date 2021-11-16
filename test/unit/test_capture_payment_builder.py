@@ -41,7 +41,7 @@ class TestCapturePaymentBuilder(unittest.TestCase):
         self.assertIsInstance(request, CapturePaymentRequest)
         self.assertEqual(
             {
-                'amount': {'value': 0.1, 'currency': Currency.RUB},
+                'amount': {'value': '0.10', 'currency': Currency.RUB},
                 'receipt': {
                     'customer': {'phone': '79990000000', 'email': 'test@email.com'},
                     'phone': '79990000000',
@@ -49,18 +49,18 @@ class TestCapturePaymentBuilder(unittest.TestCase):
                     'items': [
                         {
                             "description": "Product 1",
-                            "quantity": 2.0,
+                            "quantity": "2.0",
                             "amount": {
-                                "value": 250.0,
+                                "value": "250.00",
                                 "currency": Currency.RUB
                             },
                             "vat_code": 2
                         },
                         {
                             "description": "Product 2",
-                            "quantity": 1.0,
+                            "quantity": "1.0",
                             "amount": {
-                                "value": 100.0,
+                                "value": "100.00",
                                 "currency": Currency.RUB
                             },
                             "vat_code": 2

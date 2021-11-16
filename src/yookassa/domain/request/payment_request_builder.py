@@ -62,5 +62,13 @@ class PaymentRequestBuilder(object):
         self.__request.transfers = value
         return self
 
+    def set_deal(self, value):
+        self.__request.deal = value
+        return self
+
+    def set_merchant_customer_id(self, value):
+        self.__request.merchant_customer_id = value
+        return self
+
     def build(self):
         return self.__request

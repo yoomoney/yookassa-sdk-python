@@ -37,9 +37,16 @@ class Settlement(BaseObject):
 
 class SettlementType(object):
     """
-    Class representing settlement_type values enum
+    Class representing SettlementType values enum
     """
     CASHLESS = 'cashless'
     PREPAYMENT = 'prepayment'
     POSTPAYMENT = 'postpayment'
     CONSIDERATION = 'consideration'
+
+
+class SettlementPayoutType(object):
+    """
+    Class representing SettlementPayoutType values enum
+    """
+    PAYOUT = 'payout'

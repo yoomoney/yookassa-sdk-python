@@ -53,3 +53,11 @@ class CancellationDetailsReasonCode(object):
     PAYMENT_EXPIRED = 'payment_expired'
     EXPIRED_ON_CONFIRMATION = 'expired_on_confirmation'
     EXPIRED_ON_CAPTURE = 'expired_on_capture'
+
+
+class PayoutCancellationDetailsReasonCode(object):
+    FRAUD_SUSPECTED = 'fraud_suspected'
+    GENERAL_DECLINE = 'general_decline'
+    ONE_TIME_LIMIT_EXCEEDED = 'one_time_limit_exceeded'
+    PERIODIC_LIMIT_EXCEEDED = 'periodic_limit_exceeded'
+    REJECTED_BY_PAYEE = 'rejected_by_payee'

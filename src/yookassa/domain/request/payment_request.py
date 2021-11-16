@@ -7,6 +7,7 @@ from yookassa.domain.models.airline import Airline
 from yookassa.domain.models.amount import Amount
 from yookassa.domain.models.confirmation.confirmation import Confirmation
 from yookassa.domain.models.confirmation.confirmation_factory import ConfirmationFactory
+from yookassa.domain.models.deal import PaymentDealInfo
 from yookassa.domain.models.payment_data.payment_data import PaymentData
 from yookassa.domain.models.payment_data.payment_data_factory import PaymentDataFactory
 from yookassa.domain.models.receipt import Receipt
@@ -14,16 +15,21 @@ from yookassa.domain.models.recipient import Recipient
 from yookassa.domain.models.transfer import Transfer
 
 DESCRIPTION_MAX_LENGTH = 128
+MERCHANT_CUSTOMER_MAX_LENGTH = 200
 
 
 class PaymentRequest(RequestObject):
-    __recipient = None
+    """
+    Class representing PaymentRequest values enum
+    """
 
     __amount = None
 
     __description = None
 
     __receipt = None
+
+    __recipient = None
 
     __payment_token = None
 
@@ -39,24 +45,15 @@ class PaymentRequest(RequestObject):
 
     __client_ip = None
 
-    __airline = None
-
     __metadata = None
+
+    __airline = None
 
     __transfers = []
 
-    @property
-    def recipient(self):
-        return self.__recipient
+    __deal = None
 
-    @recipient.setter
-    def recipient(self, value):
-        if isinstance(value, dict):
-            self.__recipient = Recipient(value)
-        elif isinstance(value, Recipient):
-            self.__recipient = value
-        else:
-            raise TypeError('Invalid recipient value type')
+    __merchant_customer_id = None
 
     @property
     def amount(self):
@@ -98,6 +95,19 @@ class PaymentRequest(RequestObject):
             self.__receipt = value
         else:
             raise TypeError('Invalid receipt_request value type')
+
+    @property
+    def recipient(self):
+        return self.__recipient
+
+    @recipient.setter
+    def recipient(self, value):
+        if isinstance(value, dict):
+            self.__recipient = Recipient(value)
+        elif isinstance(value, Recipient):
+            self.__recipient = value
+        else:
+            raise TypeError('Invalid recipient value type')
 
     @property
     def payment_token(self):
@@ -205,6 +215,35 @@ class PaymentRequest(RequestObject):
             self.__transfers = []
         else:
             raise TypeError('Invalid transfers data type in payment_request.transfers')
+
+    @property
+    def deal(self):
+        return self.__deal
+
+    @deal.setter
+    def deal(self, value):
+        if isinstance(value, dict):
+            self.__deal = PaymentDealInfo(value)
+        elif isinstance(value, PaymentDealInfo):
+            self.__deal = value
+        else:
+            raise TypeError('Invalid deal type')
+
+    @property
+    def merchant_customer_id(self):
+        return self.__merchant_customer_id
+
+    @merchant_customer_id.setter
+    def merchant_customer_id(self, value):
+        cast_value = str(value)
+        if cast_value:
+            if len(cast_value) <= MERCHANT_CUSTOMER_MAX_LENGTH:
+                self.__merchant_customer_id = cast_value
+            else:
+                raise ValueError('The value of the merchant_customer_id parameter is too long. Max length is {}'
+                                 .format(MERCHANT_CUSTOMER_MAX_LENGTH))
+        else:
+            raise ValueError('Invalid description value')
 
     def validate(self):
         amount = self.amount

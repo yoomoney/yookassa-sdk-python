@@ -56,18 +56,18 @@ class TestReceiptRequest(unittest.TestCase):
             'items': [
                 {
                     'description': 'Product 1',
-                    'quantity': 2.0,
+                    'quantity': '2.0',
                     'amount': {
-                        'value': 250.0,
+                        'value': '250.00',
                         'currency': Currency.RUB
                     },
                     'vat_code': 2
                 },
                 {
                     'description': 'Product 2',
-                    'quantity': 1.0,
+                    'quantity': '1.0',
                     'amount': {
-                        'value': 100.0,
+                        'value': '100.00',
                         'currency': Currency.RUB
                     },
                     'vat_code': 2
@@ -77,7 +77,7 @@ class TestReceiptRequest(unittest.TestCase):
                 {
                     'type': SettlementType.CASHLESS,
                     'amount': {
-                        'value': 250.0,
+                        'value': '250.00',
                         'currency': Currency.RUB
                     }
                 }

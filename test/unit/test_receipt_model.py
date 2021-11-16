@@ -60,18 +60,18 @@ class TestReceiptModel(unittest.TestCase):
             'items': [
                 {
                     "description": "Product 1",
-                    "quantity": 2.1,
+                    "quantity": "2.1",
                     "amount": {
-                        "value": 250.0,
+                        "value": "250.00",
                         "currency": Currency.RUB
                     },
                     "vat_code": 2
                 },
                 {
                     "description": "Product 2",
-                    "quantity": 1.0,
+                    "quantity": "1.0",
                     "amount": {
-                        "value": 100.01,
+                        "value": "100.01",
                         "currency": Currency.RUB
                     },
                     "vat_code": 2,
@@ -80,7 +80,7 @@ class TestReceiptModel(unittest.TestCase):
                     "product_code": "00 00 00 01 00 21 FA 41 00 23 05 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 12 00 AB 00",
                     "country_of_origin_code": "RU",
                     "customs_declaration_number": "90/210",
-                    "excise": 2.00,
+                    "excise": "2.0",
                 }
             ]
         }, dict(receipt))
@@ -133,9 +133,9 @@ class TestReceiptModel(unittest.TestCase):
 
         self.assertEqual({
             "description": "Product",
-            "quantity": 1.0,
+            "quantity": "1.0",
             "amount": {
-                "value": 100.0,
+                "value": "100.00",
                 "currency": Currency.RUB
             },
             "vat_code": 2,
@@ -144,7 +144,7 @@ class TestReceiptModel(unittest.TestCase):
             "product_code": "00 00 00 01 00 21 FA 41 00 23 05 41 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 12 00 AB 00",
             "country_of_origin_code": "RU",
             "customs_declaration_number": "90/210",
-            "excise": 2.00,
+            "excise": "2.0",
         }, dict(receipt_item))
 
         with self.assertRaises(TypeError):
