@@ -6,6 +6,7 @@ from yookassa.domain.request.refund_request_builder import RefundRequestBuilder
 
 
 class TestRefundRequestBuilder(unittest.TestCase):
+
     def test_build_request(self):
         self.maxDiff = None
         builder = RefundRequestBuilder()
@@ -49,6 +50,15 @@ class TestRefundRequestBuilder(unittest.TestCase):
                     }
                 }
             ]) \
+            .set_deal({
+                'refund_settlements': [{
+                    'type': 'payout',
+                    'amount': {
+                        'value': 80.0,
+                        'currency': 'RUB'
+                    }
+                }]
+            }) \
             .build()
 
         self.assertEqual({
@@ -62,35 +72,44 @@ class TestRefundRequestBuilder(unittest.TestCase):
                 'items': [
                     {
                         "description": "Product 1",
-                        "quantity": 2.0,
+                        "quantity": "2.0",
                         "amount": {
-                            "value": 250.0,
+                            "value": "250.00",
                             "currency": Currency.RUB
                         },
                         "vat_code": 2
                     },
                     {
                         "description": "Product 2",
-                        "quantity": 1.0,
+                        "quantity": "1.0",
                         "amount": {
-                            "value": 100.0,
+                            "value": "100.00",
                             "currency": Currency.RUB
                         },
                         "vat_code": 2
                     }
                 ]},
-            'amount': {'value': 0.1, 'currency': Currency.RUB},
+            'amount': {'value': '0.10', 'currency': Currency.RUB},
             'sources': [
                 {
                     'account_id': '79990000000',
                     "amount": {
-                        "value": 100.01,
+                        "value": "100.01",
                         "currency": Currency.RUB
                     },
                     "platform_fee_amount": {
-                        "value": 10.01,
+                        "value": "10.01",
                         "currency": Currency.RUB
                     }
                 }
-            ]
+            ],
+            'deal': {
+                'refund_settlements': [{
+                    'type': 'payout',
+                    'amount': {
+                        'value': "80.00",
+                        'currency': 'RUB'
+                    }
+                }]
+            }
         }, dict(request))

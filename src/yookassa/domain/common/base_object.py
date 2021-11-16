@@ -31,7 +31,7 @@ class BaseObject(object):
                         list_value.append(value)
                 yield prop_name, list_value
             elif isinstance(prop_value, Decimal):
-                yield prop_name, float(prop_value)
+                yield prop_name, str(prop_value)
             else:
                 yield prop_name, prop_value
 

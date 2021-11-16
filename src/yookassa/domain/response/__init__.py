@@ -10,3 +10,6 @@ from yookassa.domain.response.refund_list_response import RefundListResponse
 from yookassa.domain.response.refund_response import RefundResponse
 from yookassa.domain.response.transfer_response import TransferResponse, TransferStatus
 from yookassa.domain.response.webhook_response import WebhookResponse, WebhookList
+from yookassa.domain.response.deal_response import DealResponse
+from yookassa.domain.response.deal_list_response import DealListResponse
+from yookassa.domain.response.payout_response import PayoutResponse

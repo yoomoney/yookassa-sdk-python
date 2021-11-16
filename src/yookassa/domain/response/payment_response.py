@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from yookassa.domain.common import ResponseObject
-from yookassa.domain.models import Amount, AuthorizationDetails, CancellationDetails, Recipient, RequestorFactory
+from yookassa.domain.models import Amount, AuthorizationDetails, CancellationDetails, Recipient
 from yookassa.domain.models.confirmation.confirmation_factory import ConfirmationFactory
+from yookassa.domain.models.deal import PaymentDealInfo
 from yookassa.domain.models.payment_data.payment_data_factory import PaymentDataFactory
 from yookassa.domain.response.transfer_response import TransferResponse
 
@@ -16,19 +17,21 @@ class PaymentResponse(ResponseObject):
 
     __status = None
 
-    __recipient = None
-
-    __requestor = None
-
     __amount = None
+
+    __income_amount = None
 
     __description = None
 
+    __recipient = None
+
     __payment_method = None
+
+    __captured_at = None
 
     __created_at = None
 
-    __captured_at = None
+    __expires_at = None
 
     __confirmation = None
 
@@ -44,15 +47,15 @@ class PaymentResponse(ResponseObject):
 
     __metadata = None
 
-    __expires_at = None
-
     __cancellation_details = None
 
     __authorization_details = None
 
-    __income_amount = None
-
     __transfers = None
+
+    __deal = None
+
+    __merchant_customer_id = None
 
     @property
     def id(self):
@@ -71,28 +74,20 @@ class PaymentResponse(ResponseObject):
         self.__status = value
 
     @property
-    def recipient(self):
-        return self.__recipient
-
-    @recipient.setter
-    def recipient(self, value):
-        self.__recipient = Recipient(value)
-
-    @property
-    def requestor(self):
-        return self.__requestor
-
-    @requestor.setter
-    def requestor(self, value):
-        self.__requestor = RequestorFactory().create(value)
-
-    @property
     def amount(self):
         return self.__amount
 
     @amount.setter
     def amount(self, value):
         self.__amount = Amount(value)
+
+    @property
+    def income_amount(self):
+        return self.__income_amount
+
+    @income_amount.setter
+    def income_amount(self, value):
+        self.__income_amount = Amount(value)
 
     @property
     def description(self):
@@ -103,12 +98,28 @@ class PaymentResponse(ResponseObject):
         self.__description = value
 
     @property
+    def recipient(self):
+        return self.__recipient
+
+    @recipient.setter
+    def recipient(self, value):
+        self.__recipient = Recipient(value)
+
+    @property
     def payment_method(self):
         return self.__payment_method
 
     @payment_method.setter
     def payment_method(self, value):
         self.__payment_method = PaymentDataFactory().create(value, self.context())
+
+    @property
+    def captured_at(self):
+        return self.__captured_at
+
+    @captured_at.setter
+    def captured_at(self, value):
+        self.__captured_at = value
 
     @property
     def created_at(self):
@@ -119,12 +130,12 @@ class PaymentResponse(ResponseObject):
         self.__created_at = value
 
     @property
-    def captured_at(self):
-        return self.__captured_at
+    def expires_at(self):
+        return self.__expires_at
 
-    @captured_at.setter
-    def captured_at(self, value):
-        self.__captured_at = value
+    @expires_at.setter
+    def expires_at(self, value):
+        self.__expires_at = value
 
     @property
     def confirmation(self):
@@ -183,14 +194,6 @@ class PaymentResponse(ResponseObject):
         self.__metadata = value
 
     @property
-    def expires_at(self):
-        return self.__expires_at
-
-    @expires_at.setter
-    def expires_at(self, value):
-        self.__expires_at = value
-
-    @property
     def cancellation_details(self):
         return self.__cancellation_details
 
@@ -207,14 +210,6 @@ class PaymentResponse(ResponseObject):
         self.__authorization_details = AuthorizationDetails(value)
 
     @property
-    def income_amount(self):
-        return self.__income_amount
-
-    @income_amount.setter
-    def income_amount(self, value):
-        self.__income_amount = Amount(value)
-
-    @property
     def transfers(self):
         return self.__transfers
 
@@ -226,3 +221,19 @@ class PaymentResponse(ResponseObject):
             self.__transfers = value
         else:
             raise TypeError('Invalid transfers data type in payment_response.transfers')
+
+    @property
+    def deal(self):
+        return self.__deal
+
+    @deal.setter
+    def deal(self, value):
+        self.__deal = PaymentDealInfo(value)
+
+    @property
+    def merchant_customer_id(self):
+        return self.__merchant_customer_id
+
+    @merchant_customer_id.setter
+    def merchant_customer_id(self, value):
+        self.__merchant_customer_id = value

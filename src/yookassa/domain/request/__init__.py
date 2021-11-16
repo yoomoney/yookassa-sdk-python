@@ -11,3 +11,7 @@ from yookassa.domain.request.receipt_request_builder import ReceiptRequestBuilde
 from yookassa.domain.request.refund_request import RefundRequest
 from yookassa.domain.request.refund_request_builder import RefundRequestBuilder
 from yookassa.domain.request.webhook_request import WebhookRequest
+from yookassa.domain.request.deal_request import DealRequest
+from yookassa.domain.request.deal_request_builder import DealRequestBuilder
+from yookassa.domain.request.payout_request import PayoutRequest
+from yookassa.domain.request.payout_request_builder import PayoutRequestBuilder

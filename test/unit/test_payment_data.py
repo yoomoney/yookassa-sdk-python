@@ -228,7 +228,7 @@ class TestPaymentData(unittest.TestCase):
             'vat_data': {
                 'type': VatDataType.MIXED,
                 'rate': VatDataRate.RATE_20,
-                'amount': {'value': 10.0, 'currency': Currency.RUB}
+                'amount': {'value': '10.00', 'currency': Currency.RUB}
             }
         }, dict(payment_data))
 
@@ -253,7 +253,7 @@ class TestPaymentData(unittest.TestCase):
             'vat_data': {
                 'type': VatDataType.MIXED,
                 'rate': VatDataRate.RATE_20,
-                'amount': {'value': 10.0, 'currency': Currency.RUB}
+                'amount': {'value': '10.00', 'currency': Currency.RUB}
             }
         }, dict(payment_data))
 

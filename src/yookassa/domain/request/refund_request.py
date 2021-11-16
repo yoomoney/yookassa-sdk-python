@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 from yookassa.domain.common.request_object import RequestObject
 from yookassa.domain.models.amount import Amount
+from yookassa.domain.models.deal import RefundDealData
 from yookassa.domain.models.receipt import Receipt
 from yookassa.domain.models.refund_source import RefundSource
 
 
 class RefundRequest(RequestObject):
+    """
+    Class representing response object.
 
+    Contains data
+    """
     __payment_id = None
 
     __amount = None
@@ -16,6 +21,8 @@ class RefundRequest(RequestObject):
     __receipt = None
 
     __sources = []
+
+    __deal = None
 
     @property
     def payment_id(self):
@@ -79,6 +86,19 @@ class RefundRequest(RequestObject):
             self.__receipt = value
         else:
             raise TypeError('Invalid receipt value type')
+
+    @property
+    def deal(self):
+        return self.__deal
+
+    @deal.setter
+    def deal(self, value):
+        if isinstance(value, dict):
+            self.__deal = RefundDealData(value)
+        elif isinstance(value, RefundDealData):
+            self.__deal = value
+        else:
+            raise TypeError('Invalid deal value type')
 
     def validate(self):
         if not self.payment_id:

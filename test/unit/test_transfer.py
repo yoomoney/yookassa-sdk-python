@@ -24,7 +24,7 @@ class TestTransfer(unittest.TestCase):
         self.assertEqual({
             'account_id': '79990000000',
             "amount": {
-                "value": 100.01,
+                "value": "100.01",
                 "currency": Currency.RUB
             },
             "metadata": {
@@ -35,7 +35,7 @@ class TestTransfer(unittest.TestCase):
 
         self.assertEqual('79990000000', transfer.account_id)
 
-        self.assertEqual({"value": 100.01, "currency": Currency.RUB}, dict(transfer.amount))
+        self.assertEqual({"value": "100.01", "currency": Currency.RUB}, dict(transfer.amount))
         self.assertEqual(float(transfer.amount.value), 100.01)
         self.assertEqual({"meta1": 'metatest 1', "meta2": 'metatest 2'}, dict(transfer.metadata))
 

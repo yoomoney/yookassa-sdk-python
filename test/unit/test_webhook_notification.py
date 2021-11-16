@@ -2,7 +2,8 @@
 import unittest
 
 from yookassa.domain.notification import WebhookNotification, RefundWebhookNotification, WebhookNotificationFactory
-from yookassa.domain.response import PaymentResponse, RefundResponse
+from yookassa.domain.response import PaymentResponse, RefundResponse, DealResponse
+from yookassa.domain.response.payout_response import PayoutResponse
 
 
 class TestWebhookNotification(unittest.TestCase):
@@ -180,6 +181,80 @@ class TestWebhookNotification(unittest.TestCase):
         self.assertIsInstance(notification.type, str)
         self.assertIsInstance(notification.event, str)
         self.assertIsInstance(notification.object, PaymentResponse)
+
+        body = {
+            "type": "notification",
+            "event": "deal.closed",
+            "object": {
+                "type": "safe_deal",
+                "fee_moment": "payment_succeeded",
+                "id": "dl-285e5ee7-0022-5000-8000-01516a44b147",
+                "balance": {
+                    "value": "800.00",
+                    "currency": "RUB"
+                },
+                "payout_balance": {
+                    "value": "800.00",
+                    "currency": "RUB"
+                },
+                "status": "opened",
+                "created_at": "2021-06-18T07:28:39.390497Z",
+                "expires_at": "2021-09-16T07:28:39.390513Z",
+                "metadata": {
+                    "order_id": "37"
+                },
+                "description": "SAFE_DEAL 123554642-2432FF344R",
+                "test": False
+            }
+        }
+
+        notification = WebhookNotificationFactory().create(body)
+
+        self.assertIsInstance(notification.type, str)
+        self.assertIsInstance(notification.event, str)
+        self.assertIsInstance(notification.object, DealResponse)
+
+        body = {
+            "type": "notification",
+            "event": "payout.succeeded",
+            "object": {
+                "id": "po-2855a19a-0003-5000-a000-0efa9e7f4264",
+                "amount": {
+                    "value": "320.00",
+                    "currency": "RUB"
+                },
+                "status": "succeeded",
+                "payout_destination": {
+                    "type": "bank_card",
+                    "card": {
+                        "first6": "220220",
+                        "last4": "2537",
+                        "card_type": "MIR",
+                        "issuer_country": "RU",
+                        "issuer_name": "Sberbank Of Russia"
+                    }
+                },
+                "cancellation_details": {
+                    "party": "yookassa",
+                    "reason": "one_time_limit_exceeded"
+                },
+                "description": "Выплата по заказу №37",
+                "created_at": "2021-06-21T16:22:50.512Z",
+                "deal": {
+                    "id": "dl-285e5ee7-0022-5000-8000-01516a44b147"
+                },
+                "metadata": {
+                    "order_id": "37"
+                },
+                "test": False
+            }
+        }
+
+        notification = WebhookNotificationFactory().create(body)
+
+        self.assertIsInstance(notification.type, str)
+        self.assertIsInstance(notification.event, str)
+        self.assertIsInstance(notification.object, PayoutResponse)
 
         with self.assertRaises(TypeError):
             WebhookNotificationFactory().create('invalid data')

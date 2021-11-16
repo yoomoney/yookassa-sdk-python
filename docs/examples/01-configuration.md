@@ -155,14 +155,14 @@ var_dump.var_dump(Webhook.list())
 import json
 from django.http import HttpResponse
 from yookassa import Configuration, Payment
-from yookassa.domain.notification import WebhookNotificationEventType, WebhookNotification
+from yookassa.domain.notification import WebhookNotificationEventType, WebhookNotificationFactory
 
 def my_webhook_handler(request):
     # Извлечение JSON объекта из тела запроса
     event_json = json.loads(request.body)
     try:
         # Создание объекта класса уведомлений в зависимости от события
-        notification_object = WebhookNotification(event_json)
+        notification_object = WebhookNotificationFactory().create(event_json)
         response_object = notification_object.object
         if notification_object.event == WebhookNotificationEventType.PAYMENT_SUCCEEDED:
             some_data = {
@@ -190,6 +190,29 @@ def my_webhook_handler(request):
                 'refundId': response_object.id,
                 'refundStatus': response_object.status,
                 'paymentId': response_object.payment_id,
+            }
+            # Специфичная логика
+            # ...
+        elif notification_object.event == WebhookNotificationEventType.DEAL_CLOSED:
+            some_data = {
+                'dealId': response_object.id,
+                'dealStatus': response_object.status,
+            }
+            # Специфичная логика
+            # ...
+        elif notification_object.event == WebhookNotificationEventType.PAYOUT_SUCCEEDED:
+            some_data = {
+                'payoutId': response_object.id,
+                'payoutStatus': response_object.status,
+                'dealId': response_object.deal.id,
+            }
+            # Специфичная логика
+            # ...
+        elif notification_object.event == WebhookNotificationEventType.PAYOUT_CANCELED:
+            some_data = {
+                'payoutId': response_object.id,
+                'payoutStatus': response_object.status,
+                'dealId': response_object.deal.id,
             }
             # Специфичная логика
             # ...

@@ -26,5 +26,9 @@ class RefundRequestBuilder(object):
         self.__request.sources = value
         return self
 
+    def set_deal(self, value):
+        self.__request.deal = value
+        return self
+
     def build(self):
         return self.__request
