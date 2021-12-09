@@ -4,7 +4,7 @@ from decimal import Decimal
 
 from yookassa.domain.models import Settlement
 from yookassa.domain.models.amount import Amount
-from yookassa.domain.models.authorization_details import AuthorizationDetails
+from yookassa.domain.models.authorization_details import AuthorizationDetails, ThreeDSecure
 from yookassa.domain.models.cancellation_details import CancellationDetails
 from yookassa.domain.models.confirmation.confirmation import Confirmation
 from yookassa.domain.models.currency import Currency
@@ -63,7 +63,10 @@ class TestPaymentResponse(unittest.TestCase):
             },
             "authorization_details": {
                 "rrn": "rrn",
-                "auth_code": "auth_code"
+                "auth_code": "auth_code",
+                "three_d_secure": {
+                    "applied": True
+                }
             },
             "transfers": [
                 {
@@ -106,6 +109,8 @@ class TestPaymentResponse(unittest.TestCase):
         self.assertIsInstance(response.confirmation, Confirmation)
         self.assertIsInstance(response.cancellation_details, CancellationDetails)
         self.assertIsInstance(response.authorization_details, AuthorizationDetails)
+        self.assertIsInstance(response.authorization_details.three_d_secure, ThreeDSecure)
+        self.assertEqual(response.authorization_details.three_d_secure.applied, True)
         self.assertIsInstance(response.transfers, list)
         self.assertIsInstance(response.income_amount, Amount)
         self.assertIsInstance(response.deal, PaymentDealInfo)

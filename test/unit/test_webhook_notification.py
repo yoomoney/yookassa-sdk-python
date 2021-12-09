@@ -23,7 +23,10 @@ class TestWebhookNotification(unittest.TestCase):
                 },
                 "authorization_details": {
                     "rrn": "10000000000",
-                    "auth_code": "000000"
+                    "auth_code": "000000",
+                    "three_d_secure": {
+                        "applied": True
+                    }
                 },
                 "created_at": "2018-07-10T14:27:54.691Z",
                 "description": "Заказ №72",
@@ -150,7 +153,10 @@ class TestWebhookNotification(unittest.TestCase):
                 },
                 "authorization_details": {
                     "rrn": "10000000000",
-                    "auth_code": "000000"
+                    "auth_code": "000000",
+                    "three_d_secure": {
+                        "applied": True
+                    }
                 },
                 "created_at": "2018-07-10T14:27:54.691Z",
                 "description": "Заказ №72",

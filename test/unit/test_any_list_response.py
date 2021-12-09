@@ -126,7 +126,10 @@ class TestAnyListResponse(unittest.TestCase):
                     },
                     "authorization_details": {
                         "rrn": "rrn",
-                        "auth_code": "auth_code"
+                        "auth_code": "auth_code",
+                        "three_d_secure": {
+                            "applied": True
+                        }
                     },
                     "transfers": [
                         {
