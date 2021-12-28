@@ -1,5 +1,6 @@
 requests
 setuptools
 urllib3
+netaddr
 distro
 deprecated

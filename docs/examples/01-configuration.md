@@ -156,8 +156,14 @@ import json
 from django.http import HttpResponse
 from yookassa import Configuration, Payment
 from yookassa.domain.notification import WebhookNotificationEventType, WebhookNotificationFactory
+from yookassa.domain.common import SecurityHelper
 
 def my_webhook_handler(request):
+    # Если хотите убедиться, что запрос пришел от ЮКасса, добавьте проверку:
+    ip = get_client_ip(request)  # Получите IP запроса
+    if not SecurityHelper().is_ip_trusted(ip):  
+        return HttpResponse(status=400)
+
     # Извлечение JSON объекта из тела запроса
     event_json = json.loads(request.body)
     try:

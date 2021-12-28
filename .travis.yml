@@ -7,11 +7,11 @@ python:
   - "3.5"
   - "3.4"
 matrix:
-  include:
-    - python: 2.7
-      before_install:
-        - pip install -U mock
-        - pip install -U pytest
+ include:
+   - python: 2.7
+     before_install:
+       - pip install -U mock
+       - pip install -U pytest
 # command to install dependencies
 install:
   - pip install -r requirements.txt && pip install -e .
