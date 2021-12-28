@@ -4,7 +4,7 @@ from yookassa.domain.common import BaseObject
 
 
 @deprecated("This class will be removed in one of future versions")
-class RequestorType:
+class RequestorType(object):
     MERCHANT = "merchant"
     THIRD_PARTY_CLIENT = "third_party_client"
 

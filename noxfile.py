@@ -3,7 +3,7 @@ from pathlib import Path
 
 nox.options.sessions = ["tests"]  # , "lint", "build"
 
-python = ["2.7", "3.5", "3.6", "3.7", "3.8", "3.9"]
+python = ["3.8", "3.9", "3.10"]  # "2.7", "3.5", "3.6", "3.7",
 
 
 lint_dependencies = [
