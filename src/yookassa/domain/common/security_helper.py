@@ -27,12 +27,4 @@ class SecurityHelper:
         return IPAddress(ip) in IPNetwork(network)
 
     def is_ip_trusted(self, ip):
-        for item in self.YOOKASSA_NETWORKS:
-            if '/' in item:
-                if self.is_ip_in_network(ip, item):
-                    return True
-            else:
-                if ip == item:
-                    return True
-
-        return False
+        return any(map(lambda net: self.is_ip_in_network(ip, net), self.YOOKASSA_NETWORKS))
