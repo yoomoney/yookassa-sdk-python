@@ -12,4 +12,4 @@ from yookassa.webhook import Webhook
 
 __author__ = "YooMoney"
 __email__ = 'cms@yoomoney.ru'
-__version__ = '2.2.3'
+__version__ = '2.3.0'
