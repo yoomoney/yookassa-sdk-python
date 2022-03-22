@@ -29,6 +29,8 @@ from yookassa.domain.models.payment_data.request.payment_data_wechat import \
     PaymentDataWechat as RequestPaymentDataWechat
 from yookassa.domain.models.payment_data.request.payment_data_yoomoney_wallet import \
     PaymentDataYooMoneyWallet as RequestPaymentDataYooMoneyWallet
+from yookassa.domain.models.payment_data.request.payment_data_sbp import \
+    PaymentDataSbp as RequestPaymentDataSbp
 from yookassa.domain.models.payment_data.response.payment_data_alfabank import \
     PaymentDataAlfabank as ResponsePaymentDataAlfabank
 from yookassa.domain.models.payment_data.response.payment_data_applepay import \
@@ -59,6 +61,8 @@ from yookassa.domain.models.payment_data.response.payment_data_wechat import \
     PaymentDataWechat as ResponsePaymentDataWechat
 from yookassa.domain.models.payment_data.response.payment_data_yoomoney_wallet import \
     PaymentDataYooMoneyWallet as ResponsePaymentDataYooMoneyWallet
+from yookassa.domain.models.payment_data.response.payment_data_sbp import \
+    PaymentDataSbp as ResponsePaymentDataSbp
 
 
 class PaymentDataClassMap(DataContext):
@@ -82,6 +86,7 @@ class PaymentDataClassMap(DataContext):
             PaymentMethodType.B2B_SBERBANK: RequestPaymentDataB2bSberbank,
             PaymentMethodType.TINKOFF_BANK: RequestPaymentDataTinkoffBank,
             PaymentMethodType.WECHAT: RequestPaymentDataWechat,
+            PaymentMethodType.SBP: RequestPaymentDataSbp,
         }
 
     @property
@@ -102,4 +107,5 @@ class PaymentDataClassMap(DataContext):
             PaymentMethodType.B2B_SBERBANK: ResponsePaymentDataB2bSberbank,
             PaymentMethodType.TINKOFF_BANK: ResponsePaymentDataTinkoffBank,
             PaymentMethodType.WECHAT: ResponsePaymentDataWechat,
+            PaymentMethodType.SBP: ResponsePaymentDataSbp,
         }

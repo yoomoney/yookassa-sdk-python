@@ -20,6 +20,7 @@ class PaymentMethodType:
     * yookassa.domain.common.PaymentMethodType.B2B_SBERBANK
     * yookassa.domain.common.PaymentMethodType.TINKOFF_BANK
     * yookassa.domain.common.PaymentMethodType.WECHAT
+    * yookassa.domain.common.PaymentMethodType.SBP
     """
     YOO_MONEY = 'yoo_money'
     BANK_CARD = 'bank_card'
@@ -36,3 +37,4 @@ class PaymentMethodType:
     B2B_SBERBANK = 'b2b_sberbank'
     TINKOFF_BANK = 'tinkoff_bank'
     WECHAT = 'wechat'
+    SBP = 'sbp'

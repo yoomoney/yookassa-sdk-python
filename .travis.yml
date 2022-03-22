@@ -1,13 +1,16 @@
 language: python
+dist: bionic
 python:
+  - "3.10"
   - "3.9"
   - "3.8"
   - "3.7"
   - "3.6"
   - "3.5"
-  - "3.4"
 matrix:
  include:
+   - python: 3.4
+     dist: xenial
    - python: 2.7
      before_install:
        - pip install -U mock
