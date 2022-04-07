@@ -10,7 +10,7 @@ class Settings:
         self.client = ApiClient()
 
     @classmethod
-    def get_account_settings(cls, params=None):
+    async def get_account_settings(cls, params=None):
         """
         Shop Info
 
@@ -21,5 +21,5 @@ class Settings:
         instance = cls()
         path = cls.base_path
 
-        response = instance.client.request(HttpVerb.GET, path, params)
+        response = await instance.client.request(HttpVerb.GET, path, params)
         return response

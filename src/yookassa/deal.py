@@ -14,7 +14,7 @@ class Deal:
         self.client = ApiClient()
 
     @classmethod
-    def find_one(cls, deal_id):
+    async def find_one(cls, deal_id):
         """
         Get receipt information
 
@@ -26,11 +26,11 @@ class Deal:
             raise ValueError('Invalid payment_id value')
 
         path = instance.base_path + '/' + deal_id
-        response = instance.client.request(HttpVerb.GET, path)
+        response = await instance.client.request(HttpVerb.GET, path)
         return DealResponse(response)
 
     @classmethod
-    def create(cls, params, idempotency_key=None):
+    async def create(cls, params, idempotency_key=None):
         """
         Create receipt
 
@@ -55,13 +55,13 @@ class Deal:
         else:
             raise TypeError('Invalid params value type')
 
-        response = instance.client.request(HttpVerb.POST, path, None, headers, params_object)
+        response = await instance.client.request(HttpVerb.POST, path, None, headers, params_object)
         return DealResponse(response)
 
     @classmethod
-    def list(cls, params):
+    async def list(cls, params):
         instance = cls()
         path = cls.base_path
 
-        response = instance.client.request(HttpVerb.GET, path, params)
+        response = await instance.client.request(HttpVerb.GET, path, params)
         return DealListResponse(response)
