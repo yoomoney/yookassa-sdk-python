@@ -102,7 +102,7 @@ with open('src/yookassa/__init__.py') as fp:
     version = re.search(r"__version__\s*=\s*'(.*)'", fp.read()).group(1)
 
 setup(
-    name="yookassa",
+    name="yookassa-async",
     author="YooMoney",
     author_email="cms@yoomoney.ru",
     version=version,
