@@ -14,7 +14,7 @@ Russian | [English](https://github.com/yoomoney/yookassa-sdk-python/blob/master/
 
 ## Требования
 
-1. Python 3.x
+1. Python >=3.7
 2. pip
 
 ## Установка

@@ -20,7 +20,7 @@ This product is used for managing payments under [The YooKassa API](https://yook
 For usage by those who implemented YooKassa using the API method.
 
 ## Requirements
-1. Python 2.7 or Python 3.x
+1. Python >=3.7
 2. pip
 
 ## Installation
@@ -113,17 +113,14 @@ setup(
     url="https://github.com/yoomoney/yookassa-sdk-python",
     package_dir={"": "src"},
     packages=find_packages('src'),
-    install_requires=["requests", "urllib3", "netaddr", "distro", "deprecated"],
+    install_requires=["httpx", "requests", "urllib3", "netaddr", "distro", "deprecated"],
     zip_safe=False,
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9"
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10"
     ]
 )

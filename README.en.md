@@ -11,7 +11,7 @@ This product is used for managing payments under [The YooKassa API](https://yook
 For usage by those who implemented YooKassa using the API method.
 
 ## Requirements
-1. Python 2.7 or Python 3.x
+1. Python >=3.7
 2. pip
 
 ## Installation

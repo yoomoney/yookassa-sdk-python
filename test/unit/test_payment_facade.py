@@ -2,10 +2,7 @@
 import sys
 import unittest
 
-if sys.version_info >= (3, 3):
-    from unittest.mock import patch
-else:
-    from mock import patch
+from unittest.mock import patch
 
 from yookassa.configuration import Configuration
 from yookassa.domain.models.amount import Amount
@@ -17,11 +14,11 @@ from yookassa.domain.response.payment_response import PaymentResponse
 from yookassa.payment import Payment
 
 
-class TestPaymentFacade(unittest.TestCase):
+class TestPaymentFacade(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         Configuration.configure(account_id='test_account_id', secret_key='test_secret_key')
 
-    def test_create_payment_with_dict(self):
+    async def test_create_payment_with_dict(self):
         self.maxDiff = None
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
@@ -35,7 +32,7 @@ class TestPaymentFacade(unittest.TestCase):
                 'recipient': {'account_id': '156833', 'gateway_id': '468284'},
                 'status': 'waiting_for_capture'
             }
-            payment = payment_facade.create({
+            payment = await payment_facade.create({
                 "amount": {
                     "value": "1.00",
                     "currency": "RUB"
@@ -74,7 +71,7 @@ class TestPaymentFacade(unittest.TestCase):
         self.assertIsInstance(payment.amount, Amount)
         self.assertIsInstance(payment.payment_method, PaymentDataBankCard)
 
-    def test_create_payment_with_object(self):
+    async def test_create_payment_with_object(self):
         self.maxDiff = None
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
@@ -88,7 +85,7 @@ class TestPaymentFacade(unittest.TestCase):
                 'recipient': {'account_id': '156833', 'gateway_id': '468284'},
                 'status': 'waiting_for_capture'
             }
-            payment = payment_facade.create(PaymentRequest({
+            payment = await payment_facade.create(PaymentRequest({
                 "amount": {
                     "value": "1.00",
                     "currency": "RUB"
@@ -127,7 +124,7 @@ class TestPaymentFacade(unittest.TestCase):
         self.assertIsInstance(payment.amount, Amount)
         self.assertIsInstance(payment.payment_method, PaymentDataBankCard)
 
-    def test_create_capture_with_dict(self):
+    async def test_create_capture_with_dict(self):
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -141,7 +138,7 @@ class TestPaymentFacade(unittest.TestCase):
                 'status': 'waiting_for_capture'
             }
 
-            payment = payment_facade.capture('21b23b5b-000f-5061-a000-0674e49a8c10', {
+            payment = await payment_facade.capture('21b23b5b-000f-5061-a000-0674e49a8c10', {
                 "amount": {
                     "value": "1.00",
                     "currency": "RUB"
@@ -180,7 +177,7 @@ class TestPaymentFacade(unittest.TestCase):
         self.assertIsInstance(payment.amount, Amount)
         self.assertIsInstance(payment.payment_method, PaymentDataBankCard)
 
-    def test_create_capture_with_object(self):
+    async def test_create_capture_with_object(self):
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -194,7 +191,7 @@ class TestPaymentFacade(unittest.TestCase):
                 'status': 'waiting_for_capture'
             }
 
-            payment = payment_facade.capture('21b23b5b-000f-5061-a000-0674e49a8c10', CapturePaymentRequest({
+            payment = await payment_facade.capture('21b23b5b-000f-5061-a000-0674e49a8c10', CapturePaymentRequest({
                 "amount": {
                     "value": "1.00",
                     "currency": "RUB"
@@ -233,7 +230,7 @@ class TestPaymentFacade(unittest.TestCase):
         self.assertIsInstance(payment.amount, Amount)
         self.assertIsInstance(payment.payment_method, PaymentDataBankCard)
 
-    def test_create_capture(self):
+    async def test_create_capture(self):
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -247,13 +244,13 @@ class TestPaymentFacade(unittest.TestCase):
                 'status': 'waiting_for_capture'
             }
 
-            payment = payment_facade.capture('21b23b5b-000f-5061-a000-0674e49a8c10')
+            payment = await payment_facade.capture('21b23b5b-000f-5061-a000-0674e49a8c10')
 
         self.assertIsInstance(payment, PaymentResponse)
         self.assertIsInstance(payment.amount, Amount)
         self.assertIsInstance(payment.payment_method, PaymentDataBankCard)
 
-    def test_payment_info(self):
+    async def test_payment_info(self):
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -266,13 +263,13 @@ class TestPaymentFacade(unittest.TestCase):
                 'recipient': {'account_id': '156833', 'gateway_id': '468284'},
                 'status': 'waiting_for_capture'
             }
-            payment = payment_facade.find_one('21b23b5b-000f-5061-a000-0674e49a8c10')
+            payment = await payment_facade.find_one('21b23b5b-000f-5061-a000-0674e49a8c10')
 
         self.assertIsInstance(payment, PaymentResponse)
         self.assertIsInstance(payment.amount, Amount)
         self.assertIsInstance(payment.payment_method, PaymentDataBankCard)
 
-    def test_payment_cancel(self):
+    async def test_payment_cancel(self):
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -285,13 +282,13 @@ class TestPaymentFacade(unittest.TestCase):
                 'recipient': {'account_id': '156833', 'gateway_id': '468284'},
                 'status': 'canceled'
             }
-            payment = payment_facade.cancel('21b23b5b-000f-5061-a000-0674e49a8c10')
+            payment = await payment_facade.cancel('21b23b5b-000f-5061-a000-0674e49a8c10')
 
         self.assertIsInstance(payment, PaymentResponse)
         self.assertIsInstance(payment.amount, Amount)
         self.assertIsInstance(payment.payment_method, PaymentDataBankCard)
 
-    def test_payment_list(self):
+    async def test_payment_list(self):
         payment_facade = Payment()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -322,7 +319,7 @@ class TestPaymentFacade(unittest.TestCase):
                 ],
                 'next_page': '2018-08-02 08:24:01.180;48539871',
                 'type': 'list'}
-            payment = payment_facade.list({
+            payment = await payment_facade.list({
                 'status': 'succeeded',
                 'limit': 1
             })
@@ -330,15 +327,19 @@ class TestPaymentFacade(unittest.TestCase):
             self.assertIsInstance(payment, PaymentListResponse)
             self.assertIsInstance(payment.items, list)
 
-    def test_invalid_data(self):
+    async def test_invalid_data(self):
         with self.assertRaises(ValueError):
-            Payment().find_one('')
+            payment = Payment()
+            await payment.find_one('')
 
         with self.assertRaises(TypeError):
-            Payment().create('invalid params')
+            payment = Payment()
+            await payment.create('invalid params')
 
         with self.assertRaises(ValueError):
-            Payment().capture(111)
+            payment = Payment()
+            await payment.capture(111)
 
         with self.assertRaises(ValueError):
-            Payment().cancel('')
+            payment = Payment()
+            await payment.cancel('')

@@ -4,10 +4,8 @@ import unittest
 
 from yookassa import Configuration
 
-if sys.version_info >= (3, 3):
-    from unittest.mock import patch
-else:
-    from mock import patch
+
+from unittest.mock import patch
 
 from yookassa.domain.models.amount import Amount
 from yookassa.domain.request.refund_request import RefundRequest
@@ -15,12 +13,12 @@ from yookassa.domain.response.refund_response import RefundResponse
 from yookassa.refund import Refund
 
 
-class TestRefundFacade(unittest.TestCase):
+class TestRefundFacade(unittest.IsolatedAsyncioTestCase):
 
     def setUp(self):
         Configuration.configure(account_id='test_account_id', secret_key='test_secret_key')
 
-    def test_create_payment_with_dict(self):
+    async def test_create_payment_with_dict(self):
         self.maxDiff = None
         refund_facade = Refund()
         with patch('yookassa.client.ApiClient.request') as request_mock:
@@ -34,7 +32,7 @@ class TestRefundFacade(unittest.TestCase):
                 "created_at": "2017-10-04T19:27:51.407Z",
                 "payment_id": "216749da-000f-50be-b000-096747fad91e"
             }
-            refund = refund_facade.create({
+            refund = await refund_facade.create({
                 "payment_id": "21b36369-000f-500b-9000-070b97dced26",
                 "amount": {
                     "value": 1000.01,
@@ -62,7 +60,7 @@ class TestRefundFacade(unittest.TestCase):
         self.assertIsInstance(refund, RefundResponse)
         self.assertIsInstance(refund.amount, Amount)
 
-    def test_create_payment_with_object(self):
+    async def test_create_payment_with_object(self):
 
         self.maxDiff = None
         refund_facade = Refund()
@@ -77,7 +75,7 @@ class TestRefundFacade(unittest.TestCase):
                 "created_at": "2017-10-04T19:27:51.407Z",
                 "payment_id": "216749da-000f-50be-b000-096747fad91e"
             }
-            refund = refund_facade.create(RefundRequest({
+            refund = await refund_facade.create(RefundRequest({
                 "payment_id": "21b36369-000f-500b-9000-070b97dced26",
                 "amount": {
                     "value": 1000.01,
@@ -105,7 +103,7 @@ class TestRefundFacade(unittest.TestCase):
         self.assertIsInstance(refund, RefundResponse)
         self.assertIsInstance(refund.amount, Amount)
 
-    def test_refund_info(self):
+    async def test_refund_info(self):
         self.maxDiff = None
         refund_facade = Refund()
         with patch('yookassa.client.ApiClient.request') as request_mock:
@@ -120,15 +118,16 @@ class TestRefundFacade(unittest.TestCase):
                 "payment_id": "216749da-000f-50be-b000-096747fad91e"
             }
 
-            refund = refund_facade.find_one("216749f7-0016-50be-b000-078d43a63ae4")
+            refund = await refund_facade.find_one("216749f7-0016-50be-b000-078d43a63ae4")
 
         self.assertIsInstance(refund, RefundResponse)
         self.assertIsInstance(refund.amount, Amount)
 
-    def test_invalid_data(self):
+    async def test_invalid_data(self):
         with self.assertRaises(TypeError):
-            Refund().create('')
+            refund = Refund()
+            await refund.create('')
 
         with self.assertRaises(ValueError):
-            Refund().find_one('')
-
+            refund = Refund()
+            await refund.find_one('')
