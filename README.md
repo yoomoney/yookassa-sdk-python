@@ -1,4 +1,4 @@
-# YooKassa API Python Client Library
+# YooKassa Sync API Python Client Library
 
 [![Build Status](https://travis-ci.org/yoomoney/yookassa-sdk-python.svg?branch=master)](https://travis-ci.org/yoomoney/yookassa-sdk-python)
 [![Latest Stable Version](https://img.shields.io/pypi/v/yookassa.svg)](https://pypi.org/project/yookassa/)
