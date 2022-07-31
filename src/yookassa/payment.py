@@ -14,7 +14,7 @@ class Payment:
         self.client = ApiClient()
 
     @classmethod
-    def find_one(cls, payment_id):
+    async def find_one(cls, payment_id):
         """
         Get information about payment
 
@@ -26,11 +26,11 @@ class Payment:
             raise ValueError('Invalid payment_id value')
 
         path = instance.base_path + '/' + payment_id
-        response = instance.client.request(HttpVerb.GET, path)
+        response = await instance.client.request(HttpVerb.GET, path)
         return PaymentResponse(response)
 
     @classmethod
-    def create(cls, params, idempotency_key=None):
+    async def create(cls, params, idempotency_key=None):
         """
         Create payment
 
@@ -55,11 +55,11 @@ class Payment:
         else:
             raise TypeError('Invalid params value type')
 
-        response = instance.client.request(HttpVerb.POST, path, None, headers, params_object)
+        response = await instance.client.request(HttpVerb.POST, path, None, headers, params_object)
         return PaymentResponse(response)
 
     @classmethod
-    def capture(cls, payment_id, params=None, idempotency_key=None):
+    async def capture(cls, payment_id, params=None, idempotency_key=None):
         """
         Capture payment
 
@@ -88,11 +88,11 @@ class Payment:
         else:
             params_object = None
 
-        response = instance.client.request(HttpVerb.POST, path, None, headers, params_object)
+        response = await instance.client.request(HttpVerb.POST, path, None, headers, params_object)
         return PaymentResponse(response)
 
     @classmethod
-    def cancel(cls, payment_id, idempotency_key=None):
+    async def cancel(cls, payment_id, idempotency_key=None):
         """
         Cancel payment
 
@@ -111,13 +111,13 @@ class Payment:
         headers = {
             'Idempotence-Key': str(idempotency_key)
         }
-        response = instance.client.request(HttpVerb.POST, path, None, headers)
+        response = await instance.client.request(HttpVerb.POST, path, None, headers)
         return PaymentResponse(response)
 
     @classmethod
-    def list(cls, params):
+    async def list(cls, params):
         instance = cls()
         path = cls.base_path
 
-        response = instance.client.request(HttpVerb.GET, path, params)
+        response = await instance.client.request(HttpVerb.GET, path, params)
         return PaymentListResponse(response)

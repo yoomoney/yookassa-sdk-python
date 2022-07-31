@@ -10,9 +10,11 @@ Russian | [English](https://github.com/yoomoney/yookassa-sdk-python/blob/master/
 Клиент для работы с платежами по [API ЮKassa](https://yookassa.ru/developers/api)
 Подходит тем, у кого способ подключения к ЮKassa называется API.
 
+Асинхронная версия.
+
 ## Требования
 
-1. Python 2.7 or Python 3.x
+1. Python >=3.7
 2. pip
 
 ## Установка

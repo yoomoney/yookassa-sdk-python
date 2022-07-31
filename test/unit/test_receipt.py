@@ -17,12 +17,12 @@ else:
 from yookassa.configuration import Configuration
 
 
-class TestReceipt(unittest.TestCase):
+class TestReceipt(unittest.IsolatedAsyncioTestCase):
 
     def setUp(self):
         Configuration.configure(account_id='test_account_id', secret_key='test_secret_key')
 
-    def test_list(self):
+    async def test_list(self):
         self.maxDiff = None
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -55,13 +55,13 @@ class TestReceipt(unittest.TestCase):
             }
 
             params = {"refund_id": "24be8857-000f-5000-a000-1833ed1577f3"}
-            rec_list = Receipt.list(params)
+            rec_list = await Receipt.list(params)
 
             self.assertIsInstance(rec_list, ReceiptListResponse)
             self.assertEqual(rec_list.type, "list")
             self.assertIsInstance(rec_list.items[0], ReceiptResponse)
 
-    def test_create(self):
+    async def test_create(self):
         self.maxDiff = None
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -142,7 +142,7 @@ class TestReceipt(unittest.TestCase):
                 'payment_id': '215d8da0-000f-50be-b000-0003308c89be',
                 'on_behalf_of': 'string'
             }
-            rec = Receipt.create(params)
+            rec = await Receipt.create(params)
 
             self.assertIsInstance(rec, ReceiptResponse)
             self.assertEqual(rec.type, ReceiptType.PAYMENT)
@@ -172,10 +172,10 @@ class TestReceipt(unittest.TestCase):
                 }))
             request.tax_system_code = 1
             request.payment_id = '215d8da0-000f-50be-b000-0003308c89be'
-            rec = Receipt.create(request)
+            rec = await Receipt.create(request)
 
             self.assertIsInstance(rec, ReceiptResponse)
             self.assertEqual(rec.type, "payment")
 
         with self.assertRaises(TypeError):
-            Receipt.create('invalid data')
+            await Receipt.create('invalid data')

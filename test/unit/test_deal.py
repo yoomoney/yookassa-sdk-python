@@ -2,10 +2,7 @@
 import sys
 import unittest
 
-if sys.version_info >= (3, 3):
-    from unittest.mock import patch
-else:
-    from mock import patch
+from unittest.mock import patch
 
 from yookassa.configuration import Configuration
 from yookassa.domain.models.amount import Amount
@@ -14,11 +11,11 @@ from yookassa.domain.response import DealResponse, DealListResponse
 from yookassa.deal import Deal
 
 
-class TestDealFacade(unittest.TestCase):
+class TestDealFacade(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         Configuration.configure(account_id='test_account_id', secret_key='test_secret_key')
 
-    def test_create_deal_with_dict(self):
+    async def test_create_deal_with_dict(self):
         self.maxDiff = None
         deal_facade = Deal()
         with patch('yookassa.client.ApiClient.request') as request_mock:
@@ -43,7 +40,7 @@ class TestDealFacade(unittest.TestCase):
                 "description": "SAFE_DEAL 123554642-2432FF344R",
                 "test": False
             }
-            deal = deal_facade.create({
+            deal = await deal_facade.create({
                 "type": "safe_deal",
                 "fee_moment": "deal_closed",
                 "metadata": {
@@ -56,7 +53,7 @@ class TestDealFacade(unittest.TestCase):
         self.assertIsInstance(deal.balance, Amount)
         self.assertIsInstance(deal.payout_balance, Amount)
 
-    def test_create_deal_with_object(self):
+    async def test_create_deal_with_object(self):
         self.maxDiff = None
         deal_facade = Deal()
         with patch('yookassa.client.ApiClient.request') as request_mock:
@@ -81,7 +78,7 @@ class TestDealFacade(unittest.TestCase):
                 "description": "SAFE_DEAL 123554642-2432FF344R",
                 "test": False
             }
-            deal = deal_facade.create(DealRequest({
+            deal = await deal_facade.create(DealRequest({
                 "type": "safe_deal",
                 "fee_moment": "deal_closed",
                 "metadata": {
@@ -94,7 +91,7 @@ class TestDealFacade(unittest.TestCase):
         self.assertIsInstance(deal.balance, Amount)
         self.assertIsInstance(deal.payout_balance, Amount)
 
-    def test_deal_info(self):
+    async def test_deal_info(self):
         deal_facade = Deal()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -118,13 +115,13 @@ class TestDealFacade(unittest.TestCase):
                 "description": "SAFE_DEAL 123554642-2432FF344R",
                 "test": False
             }
-            deal = deal_facade.find_one('dl-285e5ee7-0022-5000-8000-01516a44b147')
+            deal = await deal_facade.find_one('dl-285e5ee7-0022-5000-8000-01516a44b147')
 
         self.assertIsInstance(deal, DealResponse)
         self.assertIsInstance(deal.balance, Amount)
         self.assertIsInstance(deal.payout_balance, Amount)
 
-    def test_deal_list(self):
+    async def test_deal_list(self):
         deal_facade = Deal()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -154,7 +151,7 @@ class TestDealFacade(unittest.TestCase):
                 "type": "list",
                 "next_cursor": "37a5c87d-3984-51e8-a7f3-8de646d39ec15"
             }
-            deal = deal_facade.list({
+            deal = await deal_facade.list({
                 'status': 'closed',
                 'limit': 1
             })
@@ -162,9 +159,11 @@ class TestDealFacade(unittest.TestCase):
             self.assertIsInstance(deal, DealListResponse)
             self.assertIsInstance(deal.items, list)
 
-    def test_invalid_data(self):
+    async def test_invalid_data(self):
         with self.assertRaises(ValueError):
-            Deal().find_one('')
+            deal = Deal()
+            await deal.find_one('')
 
         with self.assertRaises(TypeError):
-            Deal().create('invalid params')
+            deal = Deal()
+            await deal.create('invalid params')
