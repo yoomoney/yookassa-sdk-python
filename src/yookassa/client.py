@@ -83,7 +83,8 @@ class ApiClient:
                                        f'{self.endpoint}{path}',
                                        params=query_params,
                                        headers=request_headers,
-                                       json=body)
+                                       json=body,
+                                       timeout=None)
         return raw_response
 
     def get_session(self) -> httpx.Client:
