@@ -19,11 +19,11 @@ class Webhook:
     :return: WebhookList
     """
     @classmethod
-    def list(cls):
+    async def list(cls):
         instance = cls()
         path = cls.base_path
 
-        response = instance.client.request(HttpVerb.GET, path)
+        response = await instance.client.request(HttpVerb.GET, path)
         return WebhookList(response)
 
     """
@@ -34,7 +34,7 @@ class Webhook:
     :return: WebhookResponse
     """
     @classmethod
-    def add(cls, params, idempotency_key=None):
+    async def add(cls, params, idempotency_key=None):
         instance = cls()
         path = cls.base_path
         if not idempotency_key:
@@ -50,7 +50,7 @@ class Webhook:
         else:
             raise TypeError('Invalid params value type')
 
-        response = instance.client.request(HttpVerb.POST, path, None, headers, params_object)
+        response = await instance.client.request(HttpVerb.POST, path, None, headers, params_object)
         return WebhookResponse(response)
 
     """
@@ -61,7 +61,7 @@ class Webhook:
     :return: WebhookResponse
     """
     @classmethod
-    def remove(cls, webhook_id, idempotency_key=None):
+    async def remove(cls, webhook_id, idempotency_key=None):
         instance = cls()
         path = cls.base_path + '/' + webhook_id
         if not idempotency_key:
@@ -70,5 +70,5 @@ class Webhook:
             'Idempotence-Key': str(idempotency_key)
         }
 
-        response = instance.client.request(HttpVerb.DELETE, path, None, headers)
+        response = await instance.client.request(HttpVerb.DELETE, path, None, headers)
         return WebhookResponse(response)

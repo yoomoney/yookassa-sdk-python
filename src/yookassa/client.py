@@ -1,13 +1,48 @@
 # -*- coding: utf-8 -*-
-import requests
-from requests.adapters import HTTPAdapter
+import typing
+import httpx
+import time
 from requests.auth import _basic_auth_str
-from urllib3 import Retry
 
 from yookassa import Configuration
 from yookassa.domain.common import RequestObject, UserAgent
 from yookassa.domain.exceptions import ApiError, BadRequestError, ForbiddenError, NotFoundError, \
     ResponseProcessingError, TooManyRequestsError, UnauthorizedError
+
+
+class RetryTransport(httpx.HTTPTransport):
+    """ Адаптация urllib3.Retry для HTTPX """
+
+    def __init__(self, *args, total: int = 3, backoff_factor: float = 1, method_whitelist: typing.Optional[list] = None, status_forcelist: typing.Optional[list] = None, **kwargs):
+        super(RetryTransport, self).__init__(*args, **kwargs)
+        self.total = total
+        self.backoff_factor = backoff_factor
+        self.method_whitelist = method_whitelist
+        self.status_forcelist = status_forcelist
+
+    def handle_request(
+            self,
+            request: httpx.Request,
+    ) -> httpx.Response:
+        retry = 0
+        resp = None
+        retry_active = not self.method_whitelist or request.method in self.method_whitelist
+        while retry < self.total:
+            retry += 1
+            if retry > 2:
+                time.sleep(self.backoff_factor)
+            try:
+                if resp is not None:
+                    resp.close()
+                resp = super().handle_request(request)
+            except Exception:
+                if not retry_active:
+                    raise
+                continue
+            if self.status_forcelist and resp.status_code in self.status_forcelist:
+                continue
+            break
+        return resp
 
 
 class ApiClient:
@@ -29,35 +64,34 @@ class ApiClient:
         if self.configuration.agent_module:
             self.user_agent.module = self.configuration.agent_module
 
-    def request(self, method="", path="", query_params=None, headers=None, body=None):
+    async def request(self, method="", path="", query_params=None, headers=None, body=None):
         if isinstance(body, RequestObject):
             body.validate()
             body = dict(body)
 
         request_headers = self.prepare_request_headers(headers)
-        raw_response = self.execute(body, method, path, query_params, request_headers)
+        raw_response = await self.execute(body, method, path, query_params, request_headers)
 
         if raw_response.status_code != 200:
             self.__handle_error(raw_response)
 
         return raw_response.json()
 
-    def execute(self, body, method, path, query_params, request_headers):
+    async def execute(self, body, method, path, query_params, request_headers):
         session = self.get_session()
         raw_response = session.request(method,
-                                       self.endpoint + path,
+                                       f'{self.endpoint}{path}',
                                        params=query_params,
                                        headers=request_headers,
-                                       json=body)
+                                       json=body,
+                                       timeout=None)
         return raw_response
 
-    def get_session(self):
-        session = requests.Session()
-        retries = Retry(total=self.max_attempts,
-                        backoff_factor=self.timeout / 1000,
-                        method_whitelist=['POST'],
-                        status_forcelist=[202])
-        session.mount('https://', HTTPAdapter(max_retries=retries))
+    def get_session(self) -> httpx.Client:
+        session = httpx.Client(
+            timeout=httpx.Timeout(self.timeout / 1000, connect=self.timeout / 1000),
+            transport=RetryTransport()
+        )
         return session
 
     def prepare_request_headers(self, headers):

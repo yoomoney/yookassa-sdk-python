@@ -17,7 +17,7 @@ from yookassa.domain.common.http_verb import HttpVerb
 from yookassa.domain.common.request_object import RequestObject
 
 
-class TestClient(unittest.TestCase):
+class TestClient(unittest.IsolatedAsyncioTestCase):
 
     def setUp(self):
         Configuration.configure(account_id='test_account_id', secret_key='test_secret_key')
@@ -25,7 +25,7 @@ class TestClient(unittest.TestCase):
         Configuration.agent_cms = Version('YooMoney.Cms', '0.0.2')
         Configuration.agent_module = Version('YooMoney.Module', '0.0.3')
 
-    def test_request(self):
+    async def test_request(self):
         client = ApiClient()
         with patch('yookassa.client.ApiClient.request') as request_mock:
             request_mock.return_value = {
@@ -39,9 +39,9 @@ class TestClient(unittest.TestCase):
                 'status': 'canceled'
             }
 
-            client.request(HttpVerb.POST, '/path', RequestObject(), {'header': 'header'})
+            await client.request(HttpVerb.POST, '/path', RequestObject(), {'header': 'header'})
 
-    def test_execute(self):
+    async def test_execute(self):
         client = ApiClient()
         with patch('yookassa.client.ApiClient.execute') as request_mock:
             res = Response()
@@ -49,4 +49,4 @@ class TestClient(unittest.TestCase):
             res._content = b"{}"
             request_mock.return_value = res
 
-            client.request(HttpVerb.POST, '/path', RequestObject({"param": "param"}), {'header': 'header'})
+            await client.request(HttpVerb.POST, '/path', RequestObject({"param": "param"}), {'header': 'header'})

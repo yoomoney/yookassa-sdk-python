@@ -87,8 +87,7 @@ var_dump.var_dump(me)
 
 ```python
 import var_dump as var_dump
-from yookassa import Webhook
-from yookassa.domain.notification import WebhookNotificationEventType
+from yookassa.domain.notification import WebhookNotification, WebhookNotificationEventType
 
 whUrl = 'https://merchant-site.ru/payment-notification'
 needWebhookList = [
